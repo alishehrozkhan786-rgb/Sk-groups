@@ -1,0 +1,6 @@
+{
+  "name": "Farman Recovery",
+  "description": "24/7 Dubai 16-feet flatbed car recovery with live GPS tracking, customer booking, driver dispatch, and admin fleet management.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,245 @@
+{
+  "entities": {
+    "AdminRecord": {
+      "title": "AdminRecord",
+      "description": "Authorized system administrator entry.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Auth UID of the admin" },
+        "email": { "type": "string", "description": "Verified Google email address" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp (FieldValue.serverTimestamp())" }
+      },
+      "required": ["uid", "email", "createdAt"]
+    },
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Registered user profile with role and account status.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "role": { "type": "string", "enum": ["CUSTOMER", "DRIVER", "ADMIN"] },
+        "blocked": { "type": "boolean" },
+        "preferredLang": { "type": "string", "enum": ["en", "ar"] },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp" }
+      },
+      "required": ["userId", "name", "email", "role", "blocked", "preferredLang", "createdAt", "updatedAt"]
+    },
+    "PricingConfig": {
+      "title": "PricingConfig",
+      "description": "Admin-managed Dubai recovery service pricing matrix.",
+      "type": "object",
+      "properties": {
+        "baseFeeAed": { "type": "number" },
+        "perKmAed": { "type": "number" },
+        "accidentSurchargeAed": { "type": "number" },
+        "noPapersSurchargeAed": { "type": "number" },
+        "luxuryMultiplier": { "type": "number" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp" }
+      },
+      "required": ["baseFeeAed", "perKmAed", "accidentSurchargeAed", "noPapersSurchargeAed", "luxuryMultiplier", "updatedAt"]
+    },
+    "Truck": {
+      "title": "Truck",
+      "description": "16-feet flatbed recovery truck live telemetry and assignment.",
+      "type": "object",
+      "properties": {
+        "truckNumber": { "type": "string" },
+        "modelName": { "type": "string" },
+        "pinColorHex": { "type": "string" },
+        "driverId": { "type": "string" },
+        "driverName": { "type": "string" },
+        "status": { "type": "string", "enum": ["FREE", "ON_JOB", "OFFLINE"] },
+        "lat": { "type": "number" },
+        "lng": { "type": "number" },
+        "speedKmh": { "type": "number" },
+        "headingDeg": { "type": "number" },
+        "locationName": { "type": "string" },
+        "activeBookingId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp" }
+      },
+      "required": ["truckNumber", "modelName", "pinColorHex", "driverId", "driverName", "status", "lat", "lng", "speedKmh", "headingDeg", "locationName", "activeBookingId", "createdAt", "updatedAt"]
+    },
+    "DriverRecord": {
+      "title": "DriverRecord",
+      "description": "Admin-provisioned recovery driver account and truck assignment.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "driverCode": { "type": "string" },
+        "passcode": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "phone": { "type": "string" },
+        "truckId": { "type": "string" },
+        "truckNumber": { "type": "string" },
+        "approved": { "type": "boolean" },
+        "status": { "type": "string", "enum": ["FREE", "ON_JOB", "OFFLINE"] },
+        "ratingAvg": { "type": "number" },
+        "totalTrips": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp" }
+      },
+      "required": ["userId", "driverCode", "passcode", "name", "email", "phone", "truckId", "truckNumber", "approved", "status", "ratingAvg", "totalTrips", "createdAt", "updatedAt"]
+    },
+    "DriverSession": {
+      "title": "DriverSession",
+      "description": "Verified active driver UID lookup token for O(1) security rule checks.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "driverDocId": { "type": "string" },
+        "truckId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp" }
+      },
+      "required": ["userId", "driverDocId", "truckId", "createdAt"]
+    },
+    "Booking": {
+      "title": "Booking",
+      "description": "Customer car recovery booking, payment status, and live tracking state.",
+      "type": "object",
+      "properties": {
+        "customerId": { "type": "string" },
+        "customerName": { "type": "string" },
+        "customerPhone": { "type": "string" },
+        "pickupArea": { "type": "string" },
+        "pickupAddress": { "type": "string" },
+        "pickupLat": { "type": "number" },
+        "pickupLng": { "type": "number" },
+        "dropArea": { "type": "string" },
+        "dropAddress": { "type": "string" },
+        "dropLat": { "type": "number" },
+        "dropLng": { "type": "number" },
+        "carType": { "type": "string", "enum": ["SEDAN", "SUV", "LUXURY", "VAN"] },
+        "carCondition": { "type": "string", "enum": ["ACCIDENT", "NO_PAPERS", "BREAKDOWN", "OTHER"] },
+        "issueNotes": { "type": "string" },
+        "distanceKm": { "type": "number" },
+        "priceAed": { "type": "number" },
+        "paymentMethod": { "type": "string", "enum": ["CARD", "APPLE_PAY", "CASH"] },
+        "paymentStatus": { "type": "string", "enum": ["PENDING", "PAID", "COD_DUE"] },
+        "status": { "type": "string", "enum": ["REQUESTED", "ASSIGNED", "EN_ROUTE_PICKUP", "TRUCK_ARRIVED", "CAR_LOADED", "DELIVERED", "CANCELLED"] },
+        "driverId": { "type": "string" },
+        "driverName": { "type": "string" },
+        "driverPhone": { "type": "string" },
+        "truckId": { "type": "string" },
+        "truckNumber": { "type": "string" },
+        "truckLat": { "type": "number" },
+        "truckLng": { "type": "number" },
+        "truckSpeedKmh": { "type": "number" },
+        "etaMinutes": { "type": "integer" },
+        "distanceToTargetKm": { "type": "number" },
+        "carPhotoBase64": { "type": "string" },
+        "rating": { "type": "integer" },
+        "reviewText": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp" }
+      },
+      "required": ["customerId", "customerName", "customerPhone", "pickupArea", "pickupAddress", "pickupLat", "pickupLng", "dropArea", "dropAddress", "dropLat", "dropLng", "carType", "carCondition", "issueNotes", "distanceKm", "priceAed", "paymentMethod", "paymentStatus", "status", "driverId", "driverName", "driverPhone", "truckId", "truckNumber", "truckLat", "truckLng", "truckSpeedKmh", "etaMinutes", "distanceToTargetKm", "carPhotoBase64", "rating", "reviewText", "createdAt", "updatedAt"]
+    },
+    "JobDispatch": {
+      "title": "JobDispatch",
+      "description": "Sanitized job request visible to approved drivers without customer payment details.",
+      "type": "object",
+      "properties": {
+        "bookingId": { "type": "string" },
+        "pickupArea": { "type": "string" },
+        "pickupAddress": { "type": "string" },
+        "pickupLat": { "type": "number" },
+        "pickupLng": { "type": "number" },
+        "dropArea": { "type": "string" },
+        "dropAddress": { "type": "string" },
+        "dropLat": { "type": "number" },
+        "dropLng": { "type": "number" },
+        "carType": { "type": "string", "enum": ["SEDAN", "SUV", "LUXURY", "VAN"] },
+        "carCondition": { "type": "string", "enum": ["ACCIDENT", "NO_PAPERS", "BREAKDOWN", "OTHER"] },
+        "issueNotes": { "type": "string" },
+        "distanceKm": { "type": "number" },
+        "status": { "type": "string", "enum": ["OPEN", "ACCEPTED", "REJECTED", "COMPLETED", "CANCELLED"] },
+        "assignedDriverId": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp" },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp" }
+      },
+      "required": ["bookingId", "pickupArea", "pickupAddress", "pickupLat", "pickupLng", "dropArea", "dropAddress", "dropLat", "dropLng", "carType", "carCondition", "issueNotes", "distanceKm", "status", "assignedDriverId", "createdAt", "updatedAt"]
+    },
+    "RoutePoint": {
+      "title": "RoutePoint",
+      "description": "5-second GPS breadcrumb recorded by active recovery truck.",
+      "type": "object",
+      "properties": {
+        "truckId": { "type": "string" },
+        "truckNumber": { "type": "string" },
+        "driverId": { "type": "string" },
+        "customerId": { "type": "string" },
+        "bookingId": { "type": "string" },
+        "lat": { "type": "number" },
+        "lng": { "type": "number" },
+        "speedKmh": { "type": "number" },
+        "locationName": { "type": "string" },
+        "recordedAt": { "type": "string", "format": "date-time", "description": "Server timestamp" }
+      },
+      "required": ["truckId", "truckNumber", "driverId", "customerId", "bookingId", "lat", "lng", "speedKmh", "locationName", "recordedAt"]
+    },
+    "CustomerReview": {
+      "title": "CustomerReview",
+      "description": "Verified customer rating and testimonial for completed recovery trips.",
+      "type": "object",
+      "properties": {
+        "bookingId": { "type": "string" },
+        "customerId": { "type": "string" },
+        "customerName": { "type": "string" },
+        "carType": { "type": "string" },
+        "rating": { "type": "integer" },
+        "comment": { "type": "string" },
+        "published": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp" }
+      },
+      "required": ["bookingId", "customerId", "customerName", "carType", "rating", "comment", "published", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/admins/{uid}": {
+      "schema": { "$ref": "#/entities/AdminRecord" },
+      "description": "Authorized admin records"
+    },
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "User profiles and RBAC metadata"
+    },
+    "/pricing_config/{configId}": {
+      "schema": { "$ref": "#/entities/PricingConfig" },
+      "description": "Dubai 16-feet flatbed pricing parameters"
+    },
+    "/trucks/{truckId}": {
+      "schema": { "$ref": "#/entities/Truck" },
+      "description": "Fleet trucks and live GPS telemetry"
+    },
+    "/drivers/{driverId}": {
+      "schema": { "$ref": "#/entities/DriverRecord" },
+      "description": "Driver credentials, approval status, and truck assignment"
+    },
+    "/driver_sessions/{uid}": {
+      "schema": { "$ref": "#/entities/DriverSession" },
+      "description": "Verified driver UID authorization token"
+    },
+    "/bookings/{bookingId}": {
+      "schema": { "$ref": "#/entities/Booking" },
+      "description": "Customer recovery bookings and live trip state"
+    },
+    "/job_dispatch/{bookingId}": {
+      "schema": { "$ref": "#/entities/JobDispatch" },
+      "description": "Sanitized dispatch requests for drivers without payment info"
+    },
+    "/route_history/{pointId}": {
+      "schema": { "$ref": "#/entities/RoutePoint" },
+      "description": "Truck GPS route breadcrumbs for Admin trip history"
+    },
+    "/reviews/{reviewId}": {
+      "schema": { "$ref": "#/entities/CustomerReview" },
+      "description": "Customer ratings and reviews"
+    }
+  }
+}
